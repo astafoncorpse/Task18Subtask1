@@ -15,27 +15,42 @@ namespace Task18Subtask1
     {
         public void Operation()
         {
+            Console.WriteLine("\n Добро пожаловать в приложение по скачиванию видео с YouTube");
+            Console.WriteLine("\n Введите Url Видео.");
+            string videoUrl = Console.ReadLine();
+            Console.WriteLine("\n Скачивание наснется через 5сек");
+
+            GetAsync(videoUrl);
+
+            DownloadAsync(videoUrl);
+
+            Thread.Sleep(5000);
+
             static async Task GetAsync(string videoUrl)
             {
-
                 var youtube = new YoutubeClient();
+                
+                Console.WriteLine("\n Информация о видео.");
 
-                var videoUrl = "https://www.youtube.com/watch?v=1SxqH04ZBhs";
                 var video = await youtube.Videos.GetAsync(videoUrl);
 
-                var title = video.Title; 
-                var duration = video.Duration; 
-                Console.WriteLine($"{videoUrl}");
-                Console.WriteLine($"{video.Title}");
-                Console.WriteLine($"{video.Duration}");
+                Console.WriteLine($"\n{videoUrl}");
+                Console.WriteLine($"\n{video.Title}");
+                Console.WriteLine($"\n{video.UploadDate.DateTime.ToLongDateString()}");
+                Console.WriteLine($"\n{video.Duration}");
             }
 
-            static async Task DownloadAsync(string videoUrl, string outputFilePath)
+            static async Task DownloadAsync(string videoUrl)
             {
                 var youtube = new YoutubeClient();
 
-                var videoUrl = "https://youtube.com/watch?v=u_yIGGhubZs";
-                await youtube.Videos.DownloadAsync(videoUrl, "video.mp4");
+                var video = await youtube.Videos.GetAsync(videoUrl);
+
+                await youtube.Videos.DownloadAsync(videoUrl, "Video.mp4");
+
+                Console.WriteLine("Скачивание завершено!");
+                Console.WriteLine("Скаченное видео находится в папке приложения");
+
             }
         }
     }
